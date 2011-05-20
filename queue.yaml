@@ -1,0 +1,4 @@
+queue:
+- name: fetch
+  rate: 60/h
+  bucket_size: 10

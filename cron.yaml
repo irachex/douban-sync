@@ -1,0 +1,5 @@
+cron:
+- description: fetch miniblogs
+  url: /cron/fetch/
+  schedule: every 10 minutes
+#  schedule: every 1 minutes

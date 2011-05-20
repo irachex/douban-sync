@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="zh-CN"> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title> 豆瓣同步</title>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div id="wapper"> 
+		<div id="header">
+			<h1>豆瓣同步</h1>
+		</div>
+		<div id="content">
+	        <div class="msg">
+		        {{msg}} <br/>
+		        <br/>
+		        2秒后自动<a href="{{url}}">返回</a>刚才的页面
+		    </div>
+	    </div>
+	</div>
+    <script type="text/javascript">
+        window.setTimeout("redirect_url('{{url}}') ", 2000);
+		function redirect_url(url)   
+		{   
+		      window.location.href = url;
+		}
+    </script>
+</body>
+</html>

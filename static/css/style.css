@@ -1,0 +1,121 @@
+body, div, ul, ol, li, h1, h2, h3, form, fieldset, legend, input, button, textarea, p, blockquote, th, td {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    text-shadow: 0 1px white;
+    background: url(../img/bg.png);
+    font-family: Helvetica, Microsoft YaHei, 宋体;
+}
+
+a {
+    text-decoration: none;
+    color: #36879E;
+}
+a:hover {
+    color: #fff;
+    background: #1398b0;
+    text-shadow: none;
+}
+#wapper {
+    width: 460px;
+    margin: 150px auto;
+    background: #F8F8F8;
+    border-radius: 6px;
+    -webkit-box-shadow: 3px 3px 8px #333;
+}
+    #wapper #header {
+        height: 40px;
+        line-height: 40px;
+        border-bottom: 1px solid #DDD;
+        background: #EFF8EB;
+        border-radius: 6px 6px 0 0;
+        padding-left: 20px;
+        padding-right: 30px;
+    }
+        #wapper #header h1 {
+            color:#424242;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 16px;
+            text-shadow: white 0 1px;
+            text-indent: 13px;
+        }
+        #wapper #header span.logout {
+            display: inline-block;
+            float:right;
+            font-size:12px;
+        }
+    #wapper #content {
+        font-size:14px;
+        color:#666;
+        padding: 0 15px 25px;
+    }
+        #wapper #content ol {
+            margin: 20px 30px 20px 50px;
+            padding: 0;
+        }
+    
+        #wapper #content ol li {
+            margin-top: 20px;
+            display: list-item;
+            list-style-type: none;
+            zoom: 1;
+        }
+            #wapper ol li h5 {
+                color: #060;
+                font-size: 14px;
+                line-height: 22px;
+                padding-left: 30px;
+                margin: 5px 0;
+                zoom: 1;
+                font-weight: normal;
+            }
+                #wapper ol li div.list_item {
+                    font-size:14px;
+                    padding-top:10px;
+                    padding-left:30px;
+                }
+                #wapper ol li input[type="text"] {
+                    border: 1px solid #CCC;
+                    -moz-border-radius: 2px;
+                    -webkit-border-radius: 2px;
+                    border-radius: 2px;
+                    font-size:14px;
+                }
+                #wapper ol li form {
+                    padding-top:10px;
+                }
+            #wapper ol li.douban_bind h5.todo {
+                background: url(../img/guide_step.gif) no-repeat left top;
+            }
+            #wapper ol li.weibo_bind h5.todo {
+                background: url(../img/guide_step.gif) no-repeat left -44px;
+            }
+            #wapper ol li.douban_bind h5.done {
+                background: url(../img/guide_step.gif) no-repeat left -22px;
+            }
+            #wapper ol li.weibo_bind h5.done {
+                background: url(../img/guide_step.gif) no-repeat left -66px;
+            }
+                #wapper ol li h5.done span {
+                    color: #666;
+                    padding-right: 25px;
+                    background: url(../img/ok.png) no-repeat right center;
+                }
+       #wapper #content #content_footer {
+           margin-left: 30px;
+           margin-right: 30px;
+           padding-right: 10px;
+           text-align:right;
+           padding-top: 3px;
+           font-size: 12px;
+           border-top: 1px dashed #D4D4D4;
+       }
+           
+       #wapper #content div.msg {
+           text-align:center;
+           padding-top:60px;
+           height: 120px;
+       }

@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN"> 
+<head> 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title> 豆瓣同步</title>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+	<div id="wapper"> 
+		<div id="header">
+			<h1>豆瓣同步</h1>
+			<span class="logout">
+				<a href="/logout/">换个帐号</a>
+			</span>
+		</div>
+		<div id="content">
+	        <ol> 
+	            <li class="douban_bind"> 
+	                <h5 class="done"><span>与豆瓣{{name}}连接成功</span></h5>
+	            </li> 
+	            <li class="weibo_bind"> 
+	                <h5 class="todo">连接新浪微博</h5>
+	                <div class="list_item">
+		                <a href="{{ weibo_url }}" target="_blank"><img src="/static/img/weiboconnect.png" alt="weibo connect"/></a>
+		<form action="/auth/weibo/" method="post">
+		<input type="hidden" name="request_token" value="{{token}}"/>
+		<input type="hidden" name="request_secret" value="{{secret}}"/>
+	    <label for="oauth_verifier">授权码：</label>
+	    <input type="text" name="oauth_verifier" id="oauth_verifier" />
+		<input type="submit" value="确定" />
+		</form>
+	                </div>
+		
+	            </li> 
+	        </ol>
+        </div>
+	</div>
+</body>
+</html>
