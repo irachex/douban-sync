@@ -42,7 +42,7 @@ a:hover {
             text-shadow: white 0 1px;
             text-indent: 13px;
         }
-        #wapper #header span.logout {
+        #wapper #header span.header_menu {
             display: inline-block;
             float:right;
             font-size:12px;
@@ -118,4 +118,10 @@ a:hover {
            text-align:center;
            padding-top:60px;
            height: 120px;
+       }
+       #wapper #content div.about {
+              padding-left:30px;
+              padding-right:30px;
+              text-align:left;
+              padding-top:30px;
        }

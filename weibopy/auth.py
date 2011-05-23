@@ -102,6 +102,24 @@ class OAuthHandler(AuthHandler):
         except Exception, e:
             raise WeibopError(e)
 
+    def get_authorization_url_with_callback(self, callback, signin_with_twitter=False):
+        """Get the authorization URL to redirect the user, with callback url"""
+        try:
+            # get the request token
+            self.request_token = self._get_request_token()
+
+            # build auth request and return as url
+            if signin_with_twitter:
+                url = self._get_oauth_url('authenticate')
+            else:
+                url = self._get_oauth_url('authorize')
+            request = oauth.OAuthRequest.from_token_and_callback(
+                token=self.request_token, callback=callback, http_url=url
+            )
+            return request.to_url()
+        except Exception, e:
+            raise WeibopError(e)
+
     def get_access_token(self, verifier=None):
         """
         After user has authorized the request token, get access token

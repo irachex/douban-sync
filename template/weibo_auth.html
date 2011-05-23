@@ -21,15 +21,8 @@
 	            <li class="weibo_bind"> 
 	                <h5 class="todo">连接新浪微博</h5>
 	                <div class="list_item">
-		                <a href="{{ weibo_url }}" target="_blank"><img src="/static/img/weiboconnect.png" alt="weibo connect"/></a>
-		<form action="/auth/weibo/" method="post">
-		<input type="hidden" name="request_token" value="{{token}}"/>
-		<input type="hidden" name="request_secret" value="{{secret}}"/>
-	    <label for="oauth_verifier">授权码：</label>
-	    <input type="text" name="oauth_verifier" id="oauth_verifier" />
-		<input type="submit" value="确定" />
-		</form>
-	                </div>
+		                <a href="{{ weibo_url }}"><img src="/static/img/weiboconnect.png" alt="weibo connect"/></a>
+		            </div>
 		
 	            </li> 
 	        </ol>
