@@ -119,6 +119,11 @@ class HomeHandler(BaseHandler):
                                        "weibo_name":self.user["weibo_name"] })
             
 
+class AboutHandler(BaseHandler):
+    def get(self):
+        self.render("about.html")
+        
+        
 class LogoutHandler(BaseHandler):
     def get(self):
         self.clear_cookie()
@@ -165,8 +170,14 @@ class DoubanAuthHandler(BaseHandler):
             self.set_cookie("name", account["name"])
             
             self.redirect("/auth/weibo/")
-    
-        temp_data = { "douban_url":doubanbot.get_auth_url() + "&oauth_callback=" + escape(self.request.url+"?callback=true&oauth_secret=" + doubanbot.token_secret)}
+        
+        try:
+            douban_url = doubanbot.get_auth_url()
+        except Exception,e:
+            self.render("msg.html", {"msg":"墙挡住了我和豆瓣,等会儿再试试吧", "url":"/"})
+            return
+        
+        temp_data = { "douban_url": douban_url + "&oauth_callback=" + escape(self.request.url+"?callback=true&oauth_secret=" + doubanbot.token_secret)}
         self.render("douban_auth.html", temp_data)
     
     
@@ -186,50 +197,44 @@ class WeiboAuthHandler(BaseHandler):
                     pass
             
         auth = OAuthHandler(WEIBO_API_KEY, WEIBO_API_SECRET)
-    
+        
+        callback = self.request.get("callback").strip()
+        if callback == "true":
+            verifier = self.request.get("oauth_verifier").strip()
+            auth.set_request_token(self.get_cookie("weibo_key"), 
+                                   self.get_cookie("weibo_secret"))
+                                   
+            try:
+                accessToken = auth.get_access_token(verifier)
+                weibo_name = auth.get_username()
+                self.set_cookie("weibo_name", weibo_name)
+                self.user["weibo_name"] = weibo_name
+            except Exception,e:
+                self.render("msg.html", { "msg":"授权错误,请再次尝试", "url":"/auth/weibo/" })
+                return
+            
+            user.weibo_key = accessToken.key
+            user.weibo_secret = accessToken.secret
+            user.sync_time = datetime.datetime.now()
+            user.last_id = ""
+            user.put()
+
+            fqueue = taskqueue.Queue(name='fetch')
+            ftask = taskqueue.Task(url='/task/fetch/', params=dict(uid=user.key().name()))
+            fqueue.add(ftask)
+
+            self.redirect("/")
+        
+        weibo_url = auth.get_authorization_url_with_callback(callback=self.request.url+"?callback=true")
+        self.set_cookie("weibo_key", auth.request_token.key)
+        self.set_cookie("weibo_secret", auth.request_token.secret)
+        
         temp_data = { 
             "name" : self.user["name"],
-            "weibo_url" : auth.get_authorization_url(),
-            "token":auth.request_token.key, 
-            "secret":auth.request_token.secret 
+            "weibo_url" : weibo_url,
         }
         self.render("weibo_auth.html", temp_data)
-    
-    def post(self):
-        if self.get_current_user() is None:
-            self.redirect("/auth/")
-        
-        auth = OAuthHandler(WEIBO_API_KEY, WEIBO_API_SECRET)
-        
-        request_token = self.request.get("request_token")
-        request_secret = self.request.get("request_secret")
-        auth.set_request_token(request_token, request_secret)
-        
-        verifier = self.request.get("oauth_verifier").strip()
-        try:
-            accessToken = auth.get_access_token(verifier)
-            weibo_name = auth.get_username()
-            self.set_cookie("weibo_name", weibo_name)
-            self.user["weibo_name"] = weibo_name
-        except Exception,e:
-            self.render("msg.html", { "msg" : "授权码错误", "url" : "/auth/weibo/" })
-            return
-        
-        user = User.get_by_key_name(self.user["uid"])
-        if not user:
-            self.redirect("/auth/")
-        user.weibo_key = accessToken.key
-        user.weibo_secret = accessToken.secret
-        user.sync_time = datetime.datetime.now()
-        user.last_id = ""
-        user.put()
-        
-        fqueue = taskqueue.Queue(name='fetch')
-        ftask = taskqueue.Task(url='/task/fetch/', params=dict(uid=user.key().name()))
-        fqueue.add(ftask)
-        
-        self.redirect("/")
-        
+     
 
 class CronFetchHandler(BaseHandler):
     def get(self):
@@ -267,6 +272,7 @@ def _time_independent_equals(a, b):
     
 application = webapp.WSGIApplication([
                    (r'/', HomeHandler),
+                   (r'/about/', AboutHandler),
                    (r'/logout/', LogoutHandler),
                    (r'/stop/(.*)/', StopHandler),
                    (r'/auth/', DoubanAuthHandler),
